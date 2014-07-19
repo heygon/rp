@@ -1,0 +1,169 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        var localDB = window.openDatabase('game', '1.0', 'Banco para game', 65536);
+
+        //Criando a tabela do usuário
+          localDB.transaction(function(personagem){
+              personagem.executeSql("CREATE TABLE IF NOT EXISTS `personagem` (`CodPersonagem` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeAvatar` VARCHAR(50)  NULL DEFAULT '0', `SexoAvatar` VARCHAR(50) NULL DEFAULT '0', `Classe` VARCHAR(50) NULL DEFAULT '0', `Vida` VARCHAR(50) NULL DEFAULT '0', `Mana` VARCHAR(50) NULL DEFAULT '0', `data_cadastro` VARCHAR(50) NULL DEFAULT '0', `Head` VARCHAR(50) NULL DEFAULT '0', `Skin` VARCHAR(50) NULL DEFAULT '0', `Cloat` VARCHAR(50) NULL DEFAULT '0', `Y` VARCHAR(50) NULL DEFAULT '0', `X` VARCHAR(50) NULL DEFAULT '0')");
+          });
+          
+        //Criando a tabela de ataques do usuario
+        localDB.transaction(function(ataques){
+              ataques.executeSql("CREATE TABLE IF NOT EXISTS `ataques` (`CodAtaque` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeAtaque` VARCHAR(50) NOT NULL, `TipoAtaque` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `GastoMana` VARCHAR(50) NOT NULL, `Acaba` VARCHAR(50) NOT NULL, `Efeito` VARCHAR(50) NOT NULL, `Som` VARCHAR(50) NOT NULL, `Data_Aprendeu` VARCHAR(50) NOT NULL)");
+          });
+
+        //Salvando os equipes do personagem
+        localDB.transaction(function(equip){
+              equip.executeSql("CREATE TABLE IF NOT EXISTS `equips` (`CodEquipe` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeEquipe` VARCHAR(50) NOT NULL, `TipoEquipe` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `Defesa` VARCHAR(50) NOT NULL, `Acaba` VARCHAR(50) NOT NULL, `Data_Ganhou` VARCHAR(50) NOT NULL, `Imagem` VARCHAR(50) NOT NULL)");
+          });
+
+        
+        //Criando a lista de monstros
+        localDB.transaction(function(monstro){
+              monstro.executeSql("CREATE TABLE IF NOT EXISTS `monstros` (`CodMonstro` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,`NomeMonstro` VARCHAR(50) NOT NULL, `TipoMonstro` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `Defesa` VARCHAR(50) NOT NULL, `Vida` VARCHAR(50) NOT NULL, `SomMonstro` VARCHAR(50) NOT NULL, `ImagemMonstro` VARCHAR(50) NOT NULL, `Y` VARCHAR(50) NOT NULL, `X` VARCHAR(50))");
+          });
+
+
+
+        $(document).keydown(function(event) {
+            var top  = $("#personagem").position().top;
+            var left = $("#personagem").position().left;
+
+            if ( event.which == 37){
+                $("#personagem").animate({"left":"-=50"});//esquerda
+                left = left -50;
+            }
+            if ( event.which == 38){
+                $("#personagem").animate({"top":"-=50"});//cima
+                top = top -50;
+            }
+            if ( event.which == 39){
+                $("#personagem").animate({"left":"+=50"});//direita
+                left = left +50;
+            }
+            if ( event.which == 40){
+                $("#personagem").animate({"top":"+=50"});//baixo
+                top = top +50;
+            }
+            
+            
+            localDB.transaction(function (tx) {
+                tx.executeSql("update personagem set Y='"+top+"',X='"+left+"'");
+            });
+                        
+        });
+
+
+
+
+
+            var top  = $("#personagem").position().top;
+            var left = $("#personagem").position().left;
+
+            $("#esquerda").click(function(){
+                $("#personagem").animate({"left":"-=50"});//esquerda
+                left = left -50;
+                gravaLocation(top,left);
+            });
+            
+            $("#cima").click(function(){
+                $("#personagem").animate({"top":"-=50"});//cima
+                top = top -50;
+                gravaLocation(top,left);
+            });
+            $("#direita").click(function(){
+                $("#personagem").animate({"left":"+=50"});//direita
+                left = left +50;
+                gravaLocation(top,left);
+            });
+            $("#baixo").click(function(){
+                $("#personagem").animate({"top":"+=50"});//baixo
+                top = top +50;
+                gravaLocation(top,left);
+            });
+            
+            
+            
+function gravaLocation(top,left){
+  localDB.transaction(function (tx) {
+      tx.executeSql("update personagem set Y='"+top+"',X='"+left+"'");
+  });
+}
+
+            
+
+
+
+
+
+
+    localDB.transaction(function (tx) {
+        tx.executeSql('SELECT * FROM personagem', [], function (tx, results) {
+            var len = results.rows.length, i;
+            for (i = 0; i < len; i++){
+                var row = results.rows.item(i);
+                $("#personagem").css({"top":row['Y'],"left":row['X']});
+                $("#head").css({"background":row['Head'],"height":"20px","width":"20px"});
+                $("#skin").css({"background":row['Skin'],"height":"20px","width":"20px"});
+                $("#cloat").css({"background":row['Cloat'],"height":"20px","width":"20px"});
+            }
+        });
+    });
+
+    });
+</script>
+<style>
+#personagem{ position: relative; width: 50px; border:solid 1px;}
+#controles{ background: #DDD;
+            height: 150px;
+            width: 150px;
+            font-size: 20px;
+            position: fixed;
+            top: 75%;
+            left: 69%;
+}
+#controles #cima{ border: solid 1px;
+                  height: 50px;
+                  width: 50px;
+                  position: relative;
+                  left: 33%;
+}
+#controles #direita{ border: solid 1px;
+                     height: 50px;
+                     width: 50px;
+                     float: right;
+}
+#controles #baixo{  border: solid 1px;
+                    height: 50px;
+                    width: 50px;
+                    position: relative;
+                    left: 33%;
+                    top: 30%;
+}
+#controles #esquerda{ border: solid 1px;
+                      height: 50px;
+                      width: 50px;
+                      position: relative;
+                      top: -35%;
+}
+</style>
+</head>
+<body>
+<div id="positions"></div>
+<div id="personagem">
+  <div id="head"> ______</div>
+  <div id="skin"> ______</div>
+  <div id="cloat">______</div>
+</div>
+<div id="controles">
+  <div id="cima">    ^</div>
+  <div id="direita"> ></div>
+  <div id="baixo">   V</div>
+  <div id="esquerda"><</div>
+</div>
+</body>
+</html>
