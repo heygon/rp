@@ -2,7 +2,7 @@
 <widget id="com.phonegap.RPG" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>Teste de RPG</name>
     <description>
-        Tetando o primeiro jogo com HTML5 e Phonegap
+        Testando o primeiro jogo com HTML5 e Phonegap
     </description>
     <author email="contato.m42@gmail.com" href="http://web-m42.com">
         M42 Team
