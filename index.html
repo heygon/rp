@@ -27,101 +27,166 @@
     });
 
 
-/*
+
+
+    //faz o controle por teclas
     $(document).keydown(function(event) {
         var top  = $("#personagem").position().top;
         var left = $("#personagem").position().left;
 
+        //Faz o personagem andar para a esquerda
         if ( event.which == 37){
             $("#personagem").animate({"left":"-=50"});//esquerda
+            $("#personagem").html("<img src='img/left.gif' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='img/marioleft.png' />");    
+            },500);
             left = left -50;
         }
+
+        //Faz o personagem andar para cima
         if ( event.which == 38){
             $("#personagem").animate({"top":"-=50"});//cima
+            $("#personagem").html("<img src='img/back.gif' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='img/Marioback.png' />");    
+            },500);
             top = top -50;
         }
+
+        //Faz o personagem andar para a direita
         if ( event.which == 39){
             $("#personagem").animate({"left":"+=50"});//direita
+            $("#personagem").html("<img src='img/right.gif' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='img/marioright.png' />");    
+            },500);
             left = left +50;
         }
+
+        //Faz o personagem andar para baixo
         if ( event.which == 40){
             $("#personagem").animate({"top":"+=50"});//baixo
+            $("#personagem").html("<img src='img/front.gif' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='img/mariofrontz.png' />");    
+            },500);
             top = top +50;
         }
         
-        
+        //salva as informações no banco
         localDB.transaction(function (tx) {
             tx.executeSql("update personagem set Y='"+top+"', X='"+left+"'");
         });
                     
     });
-*/
 
 
 
 
+    //pega a posição atual do personagem
     var top  = $("#personagem").position().top;
     var left = $("#personagem").position().left;
 
+    //Faz o personagem andar para a esquerda
     $("#esquerda").click(function(){
         $("#personagem").animate({"left":"-=50"});//esquerda
+        $("#personagem").html("<img src='img/left.gif' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='img/marioleft.png' />");    
+            },500);
         left = left -50;
         gravaLocation(top,left);
     });
     
+    //Faz o personagem andar para cima
     $("#cima").click(function(){
         $("#personagem").animate({"top":"-=50"});//cima
+        $("#personagem").html("<img src='img/back.gif' />");
+        setTimeout(function(){
+            $("#personagem").html("<img src='img/Marioback.png' />");    
+        },500);
         top = top -50;
         gravaLocation(top,left);
     });
+
+    //Faz o personagem andar para a direita
     $("#direita").click(function(){
         $("#personagem").animate({"left":"+=50"});//direita
+        $("#personagem").html("<img src='img/right.gif' />");
+        setTimeout(function(){
+            $("#personagem").html("<img src='img/marioright.png' />");    
+        },500);
         left = left +50;
         gravaLocation(top,left);
     });
+
+    //Faz o personagem andar para baixo
     $("#baixo").click(function(){
         $("#personagem").animate({"top":"+=50"});//baixo
+        $("#personagem").html("<img src='img/front.gif' />");
+        setTimeout(function(){
+            $("#personagem").html("<img src='img/mariofrontz.png' />");    
+        },500);
         top = top +50;
         gravaLocation(top,left);
     });
     
+
+    //Grava a posição do personagem dentro do mapa
     function gravaLocation(top,left){
       localDB.transaction(function (tx) {
           tx.executeSql("UPDATE personagem SET Y='"+top+"', X='"+left+"'");
       });
     }
 
-    localDB.transaction(function (tx) {
-        tx.executeSql('SELECT * FROM personagem', [], function (tx, results) {
-            var len = results.rows.length, i;
-            for (i = 0; i < len; i++){
-                var row = results.rows.item(i);
-                $("#personagem").css({"top":row['Y'],"left":row['X']});
-                $("#head").css({"background":row['Head'],"height":"20px","width":"20px"});
-                $("#skin").css({"background":row['Skin'],"height":"20px","width":"20px"});
-                $("#cloat").css({"background":row['Cloat'],"height":"20px","width":"20px"});
-            }
+
+    
+
+
+
+    //implementando a parte dos monstros
+    function monstros(){
+        localDB.transaction(function (tx) {
+            tx.executeSql('SELECT * FROM monstros', [], function (tx, results) {
+                var len = results.rows.length, i;
+                for (i = 0; i < len; i++){
+                    var row = results.rows.item(i);
+                    $("#monstros").after("<div id='monstro_"+row['CodMonstro']+"' class='monstro'><img src='img/monstros/"+row['ImagemMonstro']+"'/></div>");
+                    setTimeout(function(){
+                        //alert(Math.random(0,100));
+                        $("#monstro_"+row['CodMonstro']).animate();
+                    },1000);
+                }
+            });
         });
-    });
+    }
+
+    monstros();
+
 
   });
 </script>
 <style>
-  #personagem{ position: relative; width: 50px; border:solid 1px;}
+  #personagem{ position: relative; width: 50px; }
   #controles{ background: #DDD; height: 100px; width: 100px; font-size: 20px; position: fixed; top: 70%; left: 68%; }
-  #controles #cima{ border: solid 1px; height: 25px; width: 25px; position: relative; left: 33%; }
-  #controles #direita{ border: solid 1px; height: 25px; width: 25px; float: right; }
-  #controles #baixo{  border: solid 1px; height: 25px; width: 25px; position: relative; left: 33%; top: 30%; }
-  #controles #esquerda{ border: solid 1px; height: 25px; width: 25px; position: relative; top: -35%; }
+  #controles #cima{ border: solid 1px; height: 30px; width: 30px; position: relative; left: 33%; }
+  #controles #direita{ border: solid 1px; height: 30px; width: 30px; float: right; position:relative; top:-1%; left:-2%; }
+  #controles #baixo{  border: solid 1px; height: 30px; width: 30px; position: relative; left: 33%; top: 30%; }
+  #controles #esquerda{ border: solid 1px; height: 30px; width: 30px; position: relative; top: -33%; }
+  .monstro{position:relative; border:solid 1px; height: 50px; width:50px;}
 </style>
 </head>
 <body>
+
 <div id="positions"></div>
+
 <div id="personagem">
-  <div id="head">_______</div>
-  <div id="skin">_______</div>
-  <div id="cloat">______</div>
+  <img src="img/mariofrontz.png" />
 </div>
+
+<div id="monstros"></div>
+
 <div id="controles">
   <div id="cima">    ^</div>
   <div id="direita"> ></div>
