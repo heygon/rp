@@ -4,141 +4,77 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var localDB = window.openDatabase('game', '1.0', 'Banco para game', 65536);
+    var db = window.localStorage;
 
-    //Criando a tabela do usuário
-    localDB.transaction(function(personagem){
-        personagem.executeSql("CREATE TABLE IF NOT EXISTS `personagem` (`CodPersonagem` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeAvatar` VARCHAR(50)  NULL DEFAULT '0', `SexoAvatar` VARCHAR(50) NULL DEFAULT '0', `Classe` VARCHAR(50) NULL DEFAULT '0', `Vida` VARCHAR(50) NULL DEFAULT '0', `Mana` VARCHAR(50) NULL DEFAULT '0', `data_cadastro` VARCHAR(50) NULL DEFAULT '0', `Head` VARCHAR(50) NULL DEFAULT '0', `Skin` VARCHAR(50) NULL DEFAULT '0', `Cloat` VARCHAR(50) NULL DEFAULT '0', `Y` VARCHAR(50) NULL DEFAULT '0', `X` VARCHAR(50) NULL DEFAULT '0')");
-    });
-    
-    //Criando a tabela de ataques do usuario
-    localDB.transaction(function(ataques){
-        ataques.executeSql("CREATE TABLE IF NOT EXISTS `ataques` (`CodAtaque` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeAtaque` VARCHAR(50) NOT NULL, `TipoAtaque` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `GastoMana` VARCHAR(50) NOT NULL, `Acaba` VARCHAR(50) NOT NULL, `Efeito` VARCHAR(50) NOT NULL, `Som` VARCHAR(50) NOT NULL, `Data_Aprendeu` VARCHAR(50) NOT NULL)");
-    });
-
-    //Salvando os equipes do personagem
-    localDB.transaction(function(equip){
-        equip.executeSql("CREATE TABLE IF NOT EXISTS `equips` (`CodEquipe` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, `NomeEquipe` VARCHAR(50) NOT NULL, `TipoEquipe` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `Defesa` VARCHAR(50) NOT NULL, `Acaba` VARCHAR(50) NOT NULL, `Data_Ganhou` VARCHAR(50) NOT NULL, `Imagem` VARCHAR(50) NOT NULL)");
-    });
-
-    //Criando a lista de monstros
-    localDB.transaction(function(monstro){
-        monstro.executeSql("CREATE TABLE IF NOT EXISTS `monstros` (`CodMonstro` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,`NomeMonstro` VARCHAR(50) NOT NULL, `TipoMonstro` VARCHAR(50) NOT NULL, `Dano` VARCHAR(50) NOT NULL, `Defesa` VARCHAR(50) NOT NULL, `Vida` VARCHAR(50) NOT NULL, `SomMonstro` VARCHAR(50) NOT NULL, `ImagemMonstro` VARCHAR(50) NOT NULL, `Y` VARCHAR(50) NOT NULL, `X` VARCHAR(50))");
-    });
+    var personagem = {
+        Outfit: {
+            Head  : '',
+            Armor : '',
+            Legs  : '',
+            Boots : '',
+            Shield: '',
+            Arm   : ''
+        },
+        Life: 100,
+        Mana: 100,
+        Position: {
+            Y:0,
+            X:0
+        }
+    }
+    db.setItem('rpPersonagem',JSON.stringify(personagem));
 
 
 
 
-    //faz o controle por teclas
-    $(document).keydown(function(event) {
+    function andarPersonagem(key,action){
+
+        if(action == 'up'){
+            setTimeout(() => {
+                $("#personagem").html("<img src='img/mariofrontz.png' />");    
+            }, 200);
+            $('#personagem').clearQueue();
+        }
+
         var top  = $("#personagem").position().top;
         var left = $("#personagem").position().left;
 
-        //Faz o personagem andar para a esquerda
-        if ( event.which == 37){
-            $("#personagem").animate({"left":"-=50"});//esquerda
-            $("#personagem").html("<img src='img/left.gif' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='img/marioleft.png' />");    
-            },500);
-            left = left -50;
+        var personagem = JSON.parse(db.getItem('rpPersonagem'));
+        personagem.Position.Y = top;
+        personagem.Position.X = left;
+        db.setItem('rpPersonagem',JSON.stringify(personagem));
+
+        if(key == 37){
+           var andar   = {"left":"-=50"}; // Esquerda
+           var picture = 'img/left.gif';
+        }else if(key == 38){
+            var andar   = {"top":"-=50"}; //Cima
+            var picture = 'img/back.gif';
+        }else if(key == 39){
+            var andar   = {"left":"+=50"}; // Direita
+            var picture = 'img/right.gif';
+        }else if(key == 40){
+            var andar   = {"top":"+=50"}; //Baixo
+            var picture = 'img/front.gif';
         }
 
-        //Faz o personagem andar para cima
-        if ( event.which == 38){
-            $("#personagem").animate({"top":"-=50"});//cima
-            $("#personagem").html("<img src='img/back.gif' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='img/Marioback.png' />");    
-            },500);
-            top = top -50;
-        }
+        $("#personagem").animate(andar,100);//esquerda
+        $("#personagem").html("<img src='"+picture+"' />");
 
-        //Faz o personagem andar para a direita
-        if ( event.which == 39){
-            $("#personagem").animate({"left":"+=50"});//direita
-            $("#personagem").html("<img src='img/right.gif' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='img/marioright.png' />");    
-            },500);
-            left = left +50;
-        }
-
-        //Faz o personagem andar para baixo
-        if ( event.which == 40){
-            $("#personagem").animate({"top":"+=50"});//baixo
-            $("#personagem").html("<img src='img/front.gif' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='img/mariofrontz.png' />");    
-            },500);
-            top = top +50;
-        }
-        
-        //salva as informações no banco
-        localDB.transaction(function (tx) {
-            tx.executeSql("update personagem set Y='"+top+"', X='"+left+"'");
-        });
-                    
-    });
-
-
-
-
-    //pega a posição atual do personagem
-    var top  = $("#personagem").position().top;
-    var left = $("#personagem").position().left;
-
-    //Faz o personagem andar para a esquerda
-    $("#esquerda").click(function(){
-        $("#personagem").animate({"left":"-=50"});//esquerda
-        $("#personagem").html("<img src='img/left.gif' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='img/marioleft.png' />");    
-            },500);
-        left = left -50;
-        gravaLocation(top,left);
-    });
-    
-    //Faz o personagem andar para cima
-    $("#cima").click(function(){
-        $("#personagem").animate({"top":"-=50"});//cima
-        $("#personagem").html("<img src='img/back.gif' />");
-        setTimeout(function(){
-            $("#personagem").html("<img src='img/Marioback.png' />");    
-        },500);
-        top = top -50;
-        gravaLocation(top,left);
-    });
-
-    //Faz o personagem andar para a direita
-    $("#direita").click(function(){
-        $("#personagem").animate({"left":"+=50"});//direita
-        $("#personagem").html("<img src='img/right.gif' />");
-        setTimeout(function(){
-            $("#personagem").html("<img src='img/marioright.png' />");    
-        },500);
-        left = left +50;
-        gravaLocation(top,left);
-    });
-
-    //Faz o personagem andar para baixo
-    $("#baixo").click(function(){
-        $("#personagem").animate({"top":"+=50"});//baixo
-        $("#personagem").html("<img src='img/front.gif' />");
-        setTimeout(function(){
-            $("#personagem").html("<img src='img/mariofrontz.png' />");    
-        },500);
-        top = top +50;
-        gravaLocation(top,left);
-    });
-    
-
-    //Grava a posição do personagem dentro do mapa
-    function gravaLocation(top,left){
-      localDB.transaction(function (tx) {
-          tx.executeSql("UPDATE personagem SET Y='"+top+"', X='"+left+"'");
-      });
     }
+
+    $(document).keyup(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        andarPersonagem(event.which,'up');
+        
+    }).keydown(function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        andarPersonagem(event.which,'sown');
+    });
 
 
     
@@ -162,7 +98,7 @@
         });
     }
 
-    monstros();
+    //monstros();
 
 
   });
