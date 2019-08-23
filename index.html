@@ -6,8 +6,6 @@
 
     var db = window.localStorage;
 
-
-
     var personagem = {
         Outfit: {
             Head  : '',
@@ -28,14 +26,12 @@
 
 
 
-
-
     var cenario = [
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -45,45 +41,39 @@
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        
-        
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]        
     ];
-
-    
 
 
     function animaPersonagem(pictureg,picture){
-        if(pictureg == '' && picture){
+
+        var dados = JSON.parse(db.getItem('rpPersonagem'));
+
+        
+
+        if(pictureg == '' && picture == ''){
             var imgPersonagem = '<div id="personagem">';
+            imgPersonagem += '<div class="lifeBar"></div>';
             imgPersonagem += '<img src="img/mariofront.png"/>';
             imgPersonagem += '</div>';
         }else{    
             var imgPersonagem = '<div id="personagem">';
+            imgPersonagem += '<div class="lifeBar"></div>';
             imgPersonagem += '<img src="'+picture+'"/>';
             imgPersonagem += '</div>';
-
-            /*
-            $("#personagem").html("<img src='"+pictureg+"' />");
-            setTimeout(function(){
-                $("#personagem").html("<img src='"+picture+"' />");
-            },1000);
-            */
         }
-
         return imgPersonagem;
     }
     
 
     function renderizaMapa(pictureg,picture){
         var personagem = JSON.parse(db.getItem('rpPersonagem'));
-        //console.log(personagem.Position);
         $('#cenario').append('');
         var imgCeario = '';
 
@@ -101,6 +91,9 @@
                 }
                 if(cenario[linha][coluna] == 1){
                     imgCeario += '<div style="background:url(img/pedra.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
+                }
+                if(cenario[linha][coluna] == 2){
+                    imgCeario += '<div style="background:url(img/chao.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"><img src="img/monstro.png" class="monstro"/></div>';
                 }
                 col++;
             }
@@ -197,7 +190,8 @@
     #personagem{ position: relative; width: 50px; z-index:2; top:-18px; left:7px; }
     #personagem img{ height: 55px;}
     #cenario { position:relative }
-    .monstro{position:relative; border:solid 1px; height: 50px; width:50px;}
+    .monstro{ position:relative; top:-18px; left:7px;  height: 50px; width:50px;}
+    .monstro img{ height: 55px;}
     .cenario_chao_element{ height:40px; width:60px; float:left; border:solid 0.1px red }
 </style>
 </head>
@@ -211,7 +205,7 @@
     <img src="img/front.gif"/>
     <img src="img/left.gif"/>
     <img src="img/right.gif"/>
-    <img src="img/mariofrontz.png"/>
+    <img src="img/mariofront.png"/>
     <img src="img/marioleft.png"/>
     <img src="img/marioright.png"/>
     <img src="img/marioback.png"/>
