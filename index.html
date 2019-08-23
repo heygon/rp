@@ -7,52 +7,6 @@
     var db = window.localStorage;
 
 
-    var cenario = [
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-       
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-        
-        
-    ];
-
-
-    for (let linha = 0; linha < cenario.length; linha++) {
-        for (let coluna = 0; coluna < cenario[linha].length; coluna++) {
-            if(cenario[linha][coluna] == 0){
-                if(linha == 11 && coluna == 11){
-                    $('#cenario').append('<img src="img/chao.png" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element posicionaPersonagem"/>');
-                }else{
-                    $('#cenario').append('<img src="img/chao.png" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"/>');
-                }
-            }
-            if(cenario[linha][coluna] == 1){
-                $('#cenario').append('<img src="img/pedra.png" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"/>');
-            }
-            
-        }
-        $('#cenario').append('<br/>');
-    }
-
 
     var personagem = {
         Outfit: {
@@ -66,116 +20,148 @@
         Life: 100,
         Mana: 100,
         Position: {
-            Y:$('.posicionaPersonagem').attr('data-coluna'),
-            X:$('.posicionaPersonagem').attr('data-linha')
+            Y:1,
+            X:18
         }
     }
     db.setItem('rpPersonagem',JSON.stringify(personagem));
 
 
-    $('#personagem').css({
-        top : $('.posicionaPersonagem').offset().top,
-        left: $('.posicionaPersonagem').offset().left,
-    });
 
-    function posicionaPersonagem(linha,coluna){
+
+
+    var cenario = [
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
         
-        console.log('linha -> '+linha);
-        console.log('coluna -> '+coluna);
+        
+    ];
 
-        var top  = '';
-        var left = '';
-        var np = {
-            Y : 0,
-            X : 0
+    
+
+
+    function animaPersonagem(pictureg,picture){
+        if(pictureg == '' && picture){
+            var imgPersonagem = '<div id="personagem">';
+            imgPersonagem += '<img src="img/mariofront.png"/>';
+            imgPersonagem += '</div>';
+        }else{    
+            var imgPersonagem = '<div id="personagem">';
+            imgPersonagem += '<img src="'+picture+'"/>';
+            imgPersonagem += '</div>';
+
+            /*
+            $("#personagem").html("<img src='"+pictureg+"' />");
+            setTimeout(function(){
+                $("#personagem").html("<img src='"+picture+"' />");
+            },1000);
+            */
         }
 
-        $('.cenario_chao_element').each(function (index, element) {
-            var l = $(this).attr('data-linha');
-            var c = $(this).attr('data-coluna');
-            np.Y = l;
-            np.X = c;
-            if(l == linha && c == coluna){
-                $('#personagem').css({
-                    top : $(this).position().top,
-                    left: $(this).position().left,
-                });
-                return false;
-            }
-        });
-
-        var personagem = JSON.parse(db.getItem('rpPersonagem'));
-        personagem.Position = {
-            Y : np.Y,
-            X : np.X
-        };
-        db.setItem('rpPersonagem',JSON.stringify(personagem));         
-        return np;
+        return imgPersonagem;
     }
+    
 
-    function andarPersonagem(key,action){
-        if(action == 'up'){
-            setTimeout(() => {
-                $("#personagem").html("<img src='img/mariofrontz.png' />");    
-            }, 200);
-            $('#personagem').clearQueue();
-        }
-
+    function renderizaMapa(pictureg,picture){
         var personagem = JSON.parse(db.getItem('rpPersonagem'));
+        //console.log(personagem.Position);
+        $('#cenario').append('');
+        var imgCeario = '';
 
-        console.log(personagem.Position);
-        var pos = personagem.Position;
+        for (let linha = 0; linha < cenario.length; linha++) {
+            var col = 1;
+            for (let coluna = 0; coluna < cenario[linha].length; coluna++) {
 
-        console.log(cenario[parseInt(pos.Y)][parseInt(pos.X)]);
-        console.log(key);
-        if(key == 37){
-            if(cenario[parseInt(pos.X)][parseInt(pos.Y)-1] == 0){
-                var andar   = posicionaPersonagem(parseInt(pos.X)-1,parseInt(pos.Y)); // Esquerda
-                var picture = 'img/left.gif';
-                return false;
+                if(cenario[linha][coluna] == 0){
+                    if(personagem.Position.Y == coluna && personagem.Position.X == linha){
+                        console.log('linha->'+linha+' coluna->'+coluna);
+                        imgCeario += '<div style="background:url(img/chao.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element">'+animaPersonagem(pictureg,picture)+'</div>';
+                    }else{
+                        imgCeario += '<div style="background:url(img/chao.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
+                    }
+                }
+                if(cenario[linha][coluna] == 1){
+                    imgCeario += '<div style="background:url(img/pedra.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
+                }
+                col++;
             }
-        }else if(key == 38){
-            if(cenario[parseInt(pos.X)-1][parseInt(pos.Y)] == 0){
-                var andar   = posicionaPersonagem(parseInt(pos.X),parseInt(pos.Y)-1); // Cima
-                var picture = 'img/back.gif';
-                return false;
-            }
-        }else if(key == 39){
-            if(cenario[parseInt(pos.X)][parseInt(pos.Y)+1] == 0){
-                var andar   = posicionaPersonagem(parseInt(pos.X)+1,parseInt(pos.Y)); // Direita
-                var picture = 'img/right.gif';
-                return false;
-            }
-        }else if(key == 40){
-            if(cenario[parseInt(pos.X)+1][parseInt(pos.Y)] == 0){
-                var andar   = posicionaPersonagem(parseInt(pos.X),parseInt(pos.Y)+1); // Baixo
-                var picture = 'img/front.gif';
-                return false;
-            }
+            $('#cenario').css({'width':(col*60)+'px'});
+            imgCeario += '<br/>';
         }
 
-        $("#personagem").animate(andar,100);//esquerda
-        $("#personagem").html("<img src='"+picture+"' />");
+        $('#cenario').html(imgCeario);
     }
-
+    renderizaMapa('','');
     
 
     $(document).keyup(function(event) {
         event.preventDefault();
         event.stopPropagation();
 
-        if(event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40){
-            andarPersonagem(event.which,'up');
-            return false;
+
+        var pictureg = 'img/front.gif';
+        var picture = 'img/mariofront.png';
+
+        if(event.which == 37){ // Esquerda
+            console.log('Esquerda');
+
+            if(cenario[personagem.Position.X][personagem.Position.Y-1] == 0){
+                personagem.Position.Y = personagem.Position.Y-1;
+                pictureg = 'img/left.gif';
+                picture = 'img/marioleft.png';
+            }
+            
+        } else if(event.which == 38){ // Cima
+            console.log('Cima');
+
+            if(cenario[personagem.Position.X-1][personagem.Position.Y] == 0){
+                personagem.Position.X = personagem.Position.X-1;
+                pictureg = 'img/back.gif';
+                picture = 'img/marioback.png';
+            }
+
+        } else if(event.which == 39){ // Direita
+            console.log('Direita');
+
+            console.log(cenario[personagem.Position.X][personagem.Position.Y+1]);
+
+            if(cenario[personagem.Position.X][personagem.Position.Y+1] == 0){
+                personagem.Position.Y = personagem.Position.Y+1;
+                pictureg = 'img/right.gif';
+                picture = 'img/marioright.png';
+            }
+
+        } else if(event.which == 40){ // Baixo
+            console.log('Baixo');
+            
+            if(cenario[personagem.Position.X+1][personagem.Position.Y] == 0){
+                personagem.Position.X = personagem.Position.X+1;
+                pictureg = 'img/front.gif';
+                picture = 'img/mariofront.png';
+            }
         }
-        
-    }).keydown(function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        if(event.which == 37 || event.which == 38 || event.which == 39 || event.which == 40){
-            andarPersonagem(event.which,'sown');
-            return false;
-        }
+
+        db.setItem('rpPersonagem',JSON.stringify(personagem));
+        renderizaMapa(pictureg,picture); 
     });
 
 
@@ -206,29 +192,21 @@
   });
 </script>
 <style>
-    html,body{
-        padding:0px;
-        margin:0px;
-        overflow:hidden;
-    }
-    .prePersonagem{ height:0px; width:0px; overflow:hidden; }
-    #personagem{ position: fixed; width: 50px; z-index:2; }
-    #controles{ background: #DDD; height: 100px; width: 100px; font-size: 20px; position: fixed; top: 70%; left: 68%; }
-    #controles #cima{ border: solid 1px; height: 30px; width: 30px; position: relative; left: 33%; }
-    #controles #direita{ border: solid 1px; height: 30px; width: 30px; float: right; position:relative; top:-1%; left:-2%; }
-    #controles #baixo{  border: solid 1px; height: 30px; width: 30px; position: relative; left: 33%; top: 30%; }
-    #controles #esquerda{ border: solid 1px; height: 30px; width: 30px; position: relative; top: -33%; }
+    html,body{ padding:0px; margin:0px; }
+    #PrePersonagem{ height:1px; width:1px; overflow:hidden; }
+    #personagem{ position: relative; width: 50px; z-index:2; top:-18px; left:7px; }
+    #personagem img{ height: 55px;}
+    #cenario { position:relative }
     .monstro{position:relative; border:solid 1px; height: 50px; width:50px;}
-    .cenario_chao_element{
-        height:40px;
-        width:60px;
-        border:solid 1px red;
-    }
+    .cenario_chao_element{ height:40px; width:60px; float:left; border:solid 0.1px red }
 </style>
 </head>
 <body>
 
-<div class="prePersonagem">
+
+<div id="cenario"></div>
+
+<div id="PrePersonagem">
     <img src="img/back.gif"/>
     <img src="img/front.gif"/>
     <img src="img/left.gif"/>
@@ -239,28 +217,7 @@
     <img src="img/marioback.png"/>
 </div>
 
-<div id="cenario"></div>
-
-
-
-
-
-
-
-
-<div id="positions"></div>
-
-<div id="personagem">
-  <img src="img/mariofrontz.png" />
-</div>
-
 <div id="monstros"></div>
 
-<div id="controles">
-  <div id="cima">    ^</div>
-  <div id="direita"> ></div>
-  <div id="baixo">   V</div>
-  <div id="esquerda"><</div>
-</div>
 </body>
 </html>
