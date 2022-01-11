@@ -47,9 +47,16 @@
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
         [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1], 
-        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]        
+        [1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,0,0,0,2,0,0,0,4,4,4,4,4,4,4,4,4,4,4],
+        [4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4],
     ];
 
+    $('#cenario').css({
+        width: cenario[0].length * 50+'px',
+        height: cenario.length * 40+'px'
+    });
 
     function animaPersonagem(pictureg,picture){
 
@@ -88,12 +95,12 @@
                     }else{
                         imgCeario += '<div style="background:url(img/chao.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
                     }
-                }
-                if(cenario[linha][coluna] == 1){
+                }else if(cenario[linha][coluna] == 1){
                     imgCeario += '<div style="background:url(img/pedra.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
-                }
-                if(cenario[linha][coluna] == 2){
+                }else if(cenario[linha][coluna] == 2){
                     imgCeario += '<div style="background:url(img/chao.png)" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"><img src="img/monstro.png" class="monstro"/></div>';
+                }else{
+                    imgCeario += '<div style="background:#000" data-linha="'+linha+'" data-coluna="'+coluna+'" class="cenario_chao_element"></div>';
                 }
                 col++;
             }
@@ -185,14 +192,14 @@
   });
 </script>
 <style>
-    html,body{ padding:0px; margin:0px; }
+    html,body{ padding:0px; margin:0px; height: 100vh; width: 100vw; background: #000;}
     #PrePersonagem{ height:1px; width:1px; overflow:hidden; }
     #personagem{ position: relative; width: 50px; z-index:2; top:-18px; left:7px; }
     #personagem img{ height: 55px;}
-    #cenario { position:relative }
+    #cenario { position:relative;  }
     .monstro{ position:relative; top:-18px; left:7px;  height: 50px; width:50px;}
     .monstro img{ height: 55px;}
-    .cenario_chao_element{ height:40px; width:60px; float:left; border:solid 0.1px green}
+    .cenario_chao_element{ height:40px; width:60px; float:left; display: block; border:solid 0.01px green}
 </style>
 </head>
 <body>
