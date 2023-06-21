@@ -4,8 +4,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
 
-    var db = window.localStorage;
-
     var personagem = {
         Outfit: {
             Head  : '',
@@ -22,7 +20,7 @@
             X:18
         }
     }
-    db.setItem('rpPersonagem',JSON.stringify(personagem));
+    localStorage.setItem('rpPersonagem',JSON.stringify(personagem));
 
 
 
@@ -78,7 +76,7 @@
     
 
     function renderizaMapa(pictureg,picture){
-        var personagem = JSON.parse(db.getItem('rpPersonagem'));
+        var personagem = JSON.parse(localStorage.rpPersonagem);
         $('#cenario').append('');
         var imgCeario = '';
 
@@ -158,7 +156,7 @@
             }
         }
 
-        db.setItem('rpPersonagem',JSON.stringify(personagem));
+        localStorage.setItem('rpPersonagem',JSON.stringify(personagem));
         renderizaMapa(pictureg,picture); 
     });
 
@@ -168,23 +166,24 @@
 
 
     //implementando a parte dos monstros
-    function monstros(){
-        localDB.transaction(function (tx) {
-            tx.executeSql('SELECT * FROM monstros', [], function (tx, results) {
-                var len = results.rows.length, i;
-                for (i = 0; i < len; i++){
-                    var row = results.rows.item(i);
-                    $("#monstros").after("<div id='monstro_"+row['CodMonstro']+"' class='monstro'><img src='img/monstros/"+row['ImagemMonstro']+"'/></div>");
-                    setTimeout(function(){
-                        //alert(Math.random(0,100));
-                        $("#monstro_"+row['CodMonstro']).animate();
-                    },1000);
-                }
-            });
-        });
-    }
-
-    //monstros();
+    let monstros = [
+      {
+        CodMonstro : 1,
+        ImagemMonstro : 'path to image',
+        Vida : 100,
+        Velocidade : 1000
+      }
+    ]
+    
+    monstros.map((e) => {
+      $("#monstros").after("<div id='monstro_"+e.CodMonstro+"' class='monstro'><img src='img/monstros/"+e.ImagemMonstro+"'/></div>");
+      setTimeout(function(){
+          //alert(Math.random(0,100));
+          $("#monstro_"+e.CodMonstro).animate({
+            
+          },e.Velocidade);
+      },1000);
+    })
 
 
   });
